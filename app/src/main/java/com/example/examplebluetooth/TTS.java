@@ -87,12 +87,12 @@ public class TTS extends AppCompatActivity {
     private void setupModelRunner(){
 
         try {
-            int inputSize = 4; // Adjust to the actual input size
-            int outputSize = 8; // Adjust to the actual output size
-            modelRunner = new TensorFlowModelRunner(getAssets(),"model.tflite" , inputSize, outputSize);
+            int inputSize = 5; // Adjust to the actual input size
+            int outputSize = 27; // Adjust to the actual output size
+            modelRunner = new TensorFlowModelRunner(getAssets(),"sign-model.tflite" , inputSize, outputSize);
         } catch (IOException e) {
             // Handle the exception
-            System.out.println("Cannot find the model.tflite file");
+            System.out.println("Cannot find the sign-model.tflite file");
             return;
         }
     }
@@ -130,7 +130,7 @@ public class TTS extends AppCompatActivity {
         String result = "";
         Boolean mListening = true;
         int bufferSize = 100;
-        int delay = 200;
+        int delay = 2000;
         byte[] buffer = new byte[bufferSize];
         try {
             InputStream instream = socket.getInputStream();
@@ -153,7 +153,7 @@ public class TTS extends AppCompatActivity {
                     String[] strings = result.split("\\$", -1);
                     for(String string:strings){
 
-                       if(string.length() >=12){
+                       if(string.length() >=15){
 //                           Log.d(TAG, "listenForMessages: " + string);
                            String speech = angleToString(string);
                            System.out.println(string + " " + speech);
@@ -191,8 +191,8 @@ public class TTS extends AppCompatActivity {
 
         }
 
-        float[] inputData = new float[4];
-        for (int i = 0; i < 4; i++) {
+        float[] inputData = new float[5];
+        for (int i = 0; i < 5; i++) {
             String subString = string.substring(i * 3, (i * 3) + 3);
             inputData[i] = Float.parseFloat(subString);
         }
@@ -214,7 +214,10 @@ public class TTS extends AppCompatActivity {
 
         if(maxIndex == -1) return "--";
 
-        String []labels = {"zero", "one", "two", "three", "four", "five", "yo", "closed"};
+        String []labels = {"zero", "a", "b",
+                "c", "d", "e", "f", "g", "i", "j", "k", "l",
+                "m", "n", "o", "p", "q", "r", "s", "t", "u",
+                "v", "w", "x", "y", "z"};
         return labels[maxIndex];
 
 //        for(float f:outputData){
